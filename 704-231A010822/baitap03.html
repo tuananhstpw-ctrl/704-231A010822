@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Game đoán số</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 400px;
+  margin: 40px auto;
+  text-align: center;
+}
+
+input {
+  padding: 10px;
+  width: 60%;
+}
+
+button {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+#message {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+/* PHÁO HOA */
+.firework {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(6);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🎯 Game đoán số (1–100)</h2>
+  <input type="number" id="guessInput" placeholder="Nhập số">
+  <button onclick="checkGuess()">Đoán</button>
+
+  <p id="message"></p>
+  <p>Số lần đoán: <span id="count">0</span></p>
+</div>
+
+<script>
+const randomNumber = Math.floor(Math.random() * 100) + 1;
+let attempts = 0;
+
+function checkGuess() {
+  const input = document.getElementById("guessInput");
+  const guess = Number(input.value);
+
+  if (!guess || guess < 1 || guess > 100) {
+    alert("Vui lòng nhập số từ 1 đến 100");
+    return;
+  }
+
+  attempts++;
+  document.getElementById("count").innerText = attempts;
+
+  if (guess > randomNumber) {
+    document.getElementById("message").innerText = "📈 Quá cao!";
+  } else if (guess < randomNumber) {
+    document.getElementById("message").innerText = "📉 Quá thấp!";
+  } else {
+    document.getElementById("message").innerText = "🎉 Chính xác!";
+    showFirework();
+  }
+
+  input.value = "";
+}
+
+function showFirework() {
+  for (let i = 0; i < 10; i++) {
+    const fw = document.createElement("div");
+    fw.className = "firework";
+    fw.style.left = Math.random() * window.innerWidth + "px";
+    fw.style.top = Math.random() * window.innerHeight + "px";
+    fw.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(fw);
+
+    setTimeout(() => fw.remove(), 1000);
+  }
+}
+</script>
+
+</body>
+</html>
